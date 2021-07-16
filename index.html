@@ -8,6 +8,7 @@
 	<title>Mineswept</title>
 	<link rel="stylesheet" href="stylesheet.css">
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
@@ -84,7 +85,39 @@
 											(e) => e === `${width} ${height} ${difficulty}`);
 										let board_array = text_array.slice(0, index);
 										if (board_array.slice(-1) == 'Lose!') { showLose = true };
-										if (board_array.slice(-1) == 'Win!') { showWin = true };
+										if (board_array.slice(-1) == 'Win!') {
+											showWin = true;
+											var duration = 30 * 1000;
+											var end = Date.now() + duration;
+											(function frame() {
+												// launch a few confetti from the left edge
+												confetti({
+													particleCount: 7,
+													angle: 60,
+													spread: 55,
+													origin: { x: 0 }
+												});
+												// launch some confetti from the middle
+												confetti({
+													particleCount: 7,
+													angle: 90,
+													spread: 55,
+													origin: { x: 0.5, y: 1 }
+												});
+												// and launch a few from the right edge
+												confetti({
+													particleCount: 7,
+													angle: 120,
+													spread: 55,
+													origin: { x: 1 }
+												});
+
+												// keep going until we are out of time
+												if (Date.now() < end) {
+													requestAnimationFrame(frame);
+												}
+											}());
+										};
 										board_state = board_array.join('').replace(/\./g, '?').replace(/0/g, '_');
 										let state_array = text_array.slice(index);
 										game_state = state_array.join('\n');

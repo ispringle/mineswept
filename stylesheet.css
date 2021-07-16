@@ -1,51 +1,104 @@
+[x-cloak] { display: none !important; }
+
 body {
-  font-size: 10px;
+	font-size: 10px;
 }
 
 input {
-  width: 3em;
-  margin: 0.5em;
+	width: 3em;
+	margin: 0.5em;
 }
 
 label {
-  font-size: 1.4em;
-}
-
-td::before {
-  content: '[';
-}
-
-td::after {
-  content: ']';
+	font-size: 1.4em;
 }
 
 td {
-  text-align: center;
+	background-color: white;
+	font-size: 1em;
+	height: 2rem;
+	min-width: 2rem;
+	padding: 0;
+	text-align: center;
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
+	align-items: center;
+	display: flex;
+	flex-direction: column;
 }
 
 #board {
-  font-size: 1.8em;
-  font-style: monospace;
-  position: relative;
-  width: min-content;
+	font-size: 1.8em;
+	font-style: monospace;
+	position: relative;
+	width: min-content;
+}
+
+.color-F {
+	background-color: green;
+	color: white;
+}
+
+.color-_ {
+	background-color: white;
+	color: white;
+}
+
+.color-1 {
+	background-color: #0000FF;
+	color: white;
+}
+
+.color-2 {
+	background-color: #1C00E2;
+	color: white;
+}
+
+.color-3 {
+	background-color: #3800C6;
+	color: white;
+}
+
+.color-4 {
+	background-color: #71008D;
+	color: white;
+}
+
+.color-5 {
+	background-color: #8D0071;
+	color: white;
+}
+
+.color-6 {
+	background-color: #AA0055;
+	color: white;
+}
+
+.color-7 {
+	background-color: #C60038;
+	color: white;
+}
+
+.color-8 {
+	background-color: #E2001C;
+	color: white;
+}
+
+.color-M {
+	background-color: #FF0000;
+	color: white;
 }
 
 .status {
-  background-color: rgba(0,0,0,0.5);
-  height: 100%;
-  position: absolute;
-  width: 100%;
+	height: 100%;
+	position: absolute;
+	width: 100%;
 }
 
 .status p {
-  color: red;
-  font-size: 5em;
-  text-align: center;
+	color: red;
+	font-size: 5em;
+	text-align: center;
+	text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }

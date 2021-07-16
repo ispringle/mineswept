@@ -1,0 +1,51 @@
+body {
+  font-size: 10px;
+}
+
+input {
+  width: 3em;
+  margin: 0.5em;
+}
+
+label {
+  font-size: 1.4em;
+}
+
+td::before {
+  content: '[';
+}
+
+td::after {
+  content: ']';
+}
+
+td {
+  text-align: center;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+#board {
+  font-size: 1.8em;
+  font-style: monospace;
+  position: relative;
+  width: min-content;
+}
+
+.status {
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.status p {
+  color: red;
+  font-size: 5em;
+  text-align: center;
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mineswept</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+  <div
+    x-data="{ game_state: '', board_state: '.', open: false, width: 20, height: 20, difficulty: 20, open: false, showLose: false, showWin: false}"
+    id="app">
+    <div id="setup" x-data="{local_width: width, local_height: height, local_difficulty: difficulty}">
+
+      <form method="get" action="mineswepttd.0x44.pw" class="form__press" x-on:submit.prevent="open = false;
+          showLose = false;
+          showWin = false;
+          width = parseInt(local_width, 10);
+          height = parseInt(local_height, 10);
+          difficulty = parseInt(local_difficulty, 10);
+          fetch(`https://mineswepttd.0x44.pw/new/${width}/${height}/${difficulty}`)
+            .then((res) => res.text())
+            .then((text) => {
+            game_state = text;
+            board_state = '.'.repeat(width * height);
+            open = true;
+          })
+            .catch((error) => console.log(error))">
+        <label>Width<input x-model="local_width" id="width" type="number">
+      </form><label>Height<input x-model="local_height" id="height" type="number"></label><label>Difficulty<input
+          x-model="local_difficulty" id="difficulty" type="number"></label><button>New
+        Game</button>
+    </div>
+    <div id="board" x-show="open">
+      <div class="status" x-show="showWin">
+        <p>Winner!</p>
+      </div>
+      <div class="status" x-show="showLose">
+        <p>Loser!</p>
+      </div>
+      <table>
+        <template x-for="y in height">
+          <tr>
+            <template x-for="x in width">
+              <td x-on:contextmenu.prevent="fetch(`https://mineswepttd.0x44.pw/flag/${x - 1}/${y - 1}?send_state=true`, {
+                    method: 'POST',
+                    body: game_state
+                  })
+                  .then((res) => res.text())
+                  .then((text) => {
+                    console.log(text);
+                    text_array = text.split(/\r?\n/);
+                    let index = text_array.findIndex(
+                      (e) => e === `${width} ${height} ${difficulty}`);
+                    let board_array = text_array.slice(0, index);
+                    if (board_array.slice(-1) == 'Lose!') { showLose = true };
+                    if (board_array.slice(-1) == 'Win!') { showWin = true };
+                    board_state = board_array.join('');
+                    let state_array = text_array.slice(index);
+                    game_state = state_array.join('\n');
+                  })" x-on:click="fetch(`https://mineswepttd.0x44.pw/reveal/${x - 1}/${y - 1}?send_state=true`, {
+                    method: 'POST',
+                    body: game_state
+                  })
+                  .then((res) => res.text())
+                  .then((text) => {
+                    console.log(text);
+                    text_array = text.split(/\r?\n/);
+                    let index = text_array.findIndex(
+                      (e) => e === `${width} ${height} ${difficulty}`);
+                    let board_array = text_array.slice(0, index);
+                    if (board_array.slice(-1) == 'Lose!') { showLose = true };
+                    if (board_array.slice(-1) == 'Win!') { showWin = true };
+                    board_state = board_array.join('');
+                    let state_array = text_array.slice(index);
+                    game_state = state_array.join('\n');
+                  })" x-text="board_state[(y - 1) * width + (x - 1)]"></td>
+            </template>
+          </tr>
+        </template>
+      </table>
+    </div>
+</body>
+
+</html>

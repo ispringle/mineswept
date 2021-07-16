@@ -13,44 +13,28 @@
 
 <body>
 	<div
-		x-data="{ game_state: '', board_state: '.', open: false, width: 20, height: 20, difficulty: 20, open: false, showLose: false, showWin: false}"
+		x-data="{ game_state: '', board_state: '.', open: false, width: 0, height: 0, difficulty: 0, open: false, showLose: false, showWin: false}"
 		id="app">
 		<div id="setup" x-data="{local_width: 9, local_height: 9, local_difficulty: 10}">
 
 			<form method="get" action="mineswepttd.0x44.pw" class="form__press" x-on:submit.prevent="open = false;
-					showLose = false;
-					showWin = false;
-					width = parseInt(local_width, 10);
-					height = parseInt(local_height, 10);
-					difficulty = parseInt(local_difficulty, 10);
-					fetch(`https://mineswepttd.0x44.pw/new/${width}/${height}/${difficulty}`)
-						.then((res) => res.text())
-						.then((text) => {
+					[showWin, showLose] = [false, false];
+					[width, height, difficulty] = [parseInt(local_width, 10), parseInt(local_height, 10), parseInt(local_difficulty, 10)];
+					fetch(`https://mineswepttd.0x44.pw/new/${width}/${height}/${difficulty}`).then((res) => res.text()).then((text) => {
 						game_state = text;
 						board_state = '?'.repeat(width * height);
 						open = true;
-					})
-						.catch((error) => console.error(error));">
+					}).catch((error) => console.error(error));">
 				<select name="Preset" x-on:change="
-				$refs.input_width.readOnly = true;
-				$refs.input_height.readOnly = true;
-				$refs.input_difficulty.readOnly = true;
+				[$refs.input_width.readOnly, $refs.input_height.readOnly, $refs.input_difficulty.readOnly] = [true, true, true];
 				if ($event.target.value === 'Easy') {
-					local_width = 9;
-					local_height = 9;
-					local_difficulty = 10;
+					[local_width, local_height, local_difficulty] = [9, 9, 10];
 				} else if ($event.target.value === 'Medium') {
-					local_width = 16;
-					local_height = 16;
-					local_difficulty = 40;
+					[local_width, local_height, local_difficulty] = [16, 16, 40];
 				} else if ($event.target.value === 'Hard') {
-					local_width = 30;
-					local_height = 16;
-					local_difficulty = 99;
+					[local_width, local_height, local_difficulty] = [30, 16, 99];
 				} else if ($event.target.value === 'Custom') {
-					$refs.input_width.readOnly = false;
-					$refs.input_height.readOnly = false;
-					$refs.input_difficulty.readOnly = false;
+					[$refs.input_width.readOnly, $refs.input_height.readOnly, $refs.input_difficulty.readOnly] = [false, false, false];
 				}">
 					<option>Easy</option>
 					<option>Medium</option>
@@ -75,60 +59,25 @@
 					<tr>
 						<template x-for="x in width">
 							<td x-on:contextmenu.prevent="fetch(`https://mineswepttd.0x44.pw/flag/${x - 1}/${y - 1}?send_state=true`, {
-										method: 'POST',
-										body: game_state
-									})
-									.then((res) => res.text())
-									.then((text) => {
+										method: 'POST', body: game_state }).then((res) => res.text()).then((text) => {
 										text_array = text.split(/\r?\n/);
-										let index = text_array.findIndex(
-											(e) => e === `${width} ${height} ${difficulty}`);
-										let board_array = text_array.slice(0, index);
-										if (board_array.slice(-1) == 'Lose!') { showLose = true };
-										if (board_array.slice(-1) == 'Win!') {
+										let index = text_array.findIndex((e) => e === `${width} ${height} ${difficulty}`);
+										board_state = text_array.slice(0, index).join('').replace(/\./g, '?').replace(/0/g, '_');
+										if (board_state.search(/Lose/) !== -1) { showLose = true };
+										if (board_state.search(/Win/) !== -1) {
 											showWin = true;
-											var duration = 5 * 1000;
-											var end = Date.now() + duration;
-											(function frame() {
-												// launch a few confetti from the left edge
-												confetti({
-													particleCount: 7,
-													angle: 60,
-													spread: 55,
-													origin: { x: 0 }
-												});
-												// and launch a few from the right edge
-												confetti({
-													particleCount: 7,
-													angle: 120,
-													spread: 55,
-													origin: { x: 1 }
-												});
-
-												// keep going until we are out of time
-												if (Date.now() < end) {
-													requestAnimationFrame(frame);
-												}
-											}());
-										};
-										board_state = board_array.join('').replace(/\./g, '?').replace(/0/g, '_');
-										let state_array = text_array.slice(index);
-										game_state = state_array.join('\n');
+											confetti();};
+										game_state = text_array.slice(index).join('\n');
 									})" x-on:click="fetch(`https://mineswepttd.0x44.pw/reveal/${x - 1}/${y - 1}?send_state=true`, {
-										method: 'POST',
-										body: game_state
-									})
-									.then((res) => res.text())
-									.then((text) => {
+										method: 'POST', body: game_state }).then((res) => res.text()).then((text) => {
 										text_array = text.split(/\r?\n/);
-										let index = text_array.findIndex(
-											(e) => e === `${width} ${height} ${difficulty}`);
-										let board_array = text_array.slice(0, index);
-										if (board_array.slice(-1) == 'Lose!') { showLose = true };
-										if (board_array.slice(-1) == 'Win!') { showWin = true };
-										board_state = board_array.join('').replace(/\./g, '?').replace(/0/g, '_');
-										let state_array = text_array.slice(index);
-										game_state = state_array.join('\n');
+										let index = text_array.findIndex((e) => e === `${width} ${height} ${difficulty}`);
+										board_state = text_array.slice(0, index).join('').replace(/\./g, '?').replace(/0/g, '_');
+										if (board_state.search(/Lose/) !== -1) { showLose = true };
+										if (board_state.search(/Win/) !== -1) {
+											showWin = true;
+											confetti();};
+										game_state = text_array.slice(index).join('\n');
 									})" x-text="board_state[(y - 1) * width + (x - 1)]"
 								x-bind:class="`color-${board_state[(y - 1) * width + (x - 1)]}`"></td>
 						</template>

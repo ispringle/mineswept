@@ -29,7 +29,7 @@
 						board_state = '?'.repeat(width * height);
 						open = true;
 					})
-						.catch((error) => console.log(error));">
+						.catch((error) => console.error(error));">
 				<select name="Preset" x-on:change="
 				$refs.input_width.readOnly = true;
 				$refs.input_height.readOnly = true;
@@ -79,7 +79,6 @@
 									})
 									.then((res) => res.text())
 									.then((text) => {
-										console.log(text);
 										text_array = text.split(/\r?\n/);
 										let index = text_array.findIndex(
 											(e) => e === `${width} ${height} ${difficulty}`);
@@ -95,7 +94,6 @@
 									})
 									.then((res) => res.text())
 									.then((text) => {
-										console.log(text);
 										text_array = text.split(/\r?\n/);
 										let index = text_array.findIndex(
 											(e) => e === `${width} ${height} ${difficulty}`);

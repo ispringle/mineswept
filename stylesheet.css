@@ -36,6 +36,23 @@ td {
 	width: min-content;
 }
 
+#loser {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+#loser img {
+	position: absolute;
+	top: 25%;
+	right: -20em;
+	transform: rotate(-50deg);
+	z-index: 1;
+}
+
 .color-F {
 	background-color: green;
 	color: white;
@@ -95,6 +112,7 @@ td {
 	height: 100%;
 	position: absolute;
 	width: 100%;
+	z-index: 2;
 }
 
 .status p {

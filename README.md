@@ -6,5 +6,5 @@ The best game ever!
 
 ## Todo
 
-- [ ] Assign colors to cells based on cell's value
+- [X] Assign colors to cells based on cell's value
 - [ ] Mobile support
